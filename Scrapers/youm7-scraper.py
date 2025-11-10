@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 MAX_ARTICLES_PER_SECTION = 5
 SCROLLS_PER_SECTION = max(2, MAX_ARTICLES_PER_SECTION // 10)
 
-AWS_BUCKET_NAME = "sentiment-data-lake" 
+AWS_BUCKET_NAME = "sentiment-data-lake"
 AWS_REGION = "eu-north-1"
 S3_PREFIX = "raw/youm7/"
 S3_SEEN_LINKS_KEY = f"{S3_PREFIX}seen_links.json"
@@ -67,7 +67,6 @@ def upload_to_s3(s3_client, data, s3_key):
 
 
 def load_seen_links_from_s3(s3_client):
-    """Load seen links (if any) from S3"""
     try:
         response = s3_client.get_object(Bucket=AWS_BUCKET_NAME, Key=S3_SEEN_LINKS_KEY)
         data = json.loads(response["Body"].read().decode("utf-8"))
@@ -82,7 +81,6 @@ def load_seen_links_from_s3(s3_client):
 
 
 def save_seen_links_to_s3(s3_client, seen_links):
-    """Save updated seen links to S3"""
     try:
         s3_client.put_object(
             Bucket=AWS_BUCKET_NAME,
@@ -118,7 +116,7 @@ def scrape_article_content(driver, link):
             paragraphs = article_soup.find_all("p")
 
         full_text = " ".join([p.get_text(strip=True) for p in paragraphs])
-        return full_text
+        return full_text.strip()
     except Exception as e:
         logger.warning(f"Failed to scrape article content: {e}")
         return ""
@@ -149,7 +147,7 @@ def scrape_section(driver, section_name, section_url, seen_links):
                     link = base_url + link
 
                 if link in seen_links:
-                    continue  # Skip duplicates
+                    continue
 
                 img_tag = card.find("img")
                 image_url = img_tag.get("src") if img_tag else ""
@@ -161,17 +159,20 @@ def scrape_section(driver, section_name, section_url, seen_links):
                 summary = desc_tag.get_text(strip=True) if desc_tag else ""
 
                 full_text = scrape_article_content(driver, link)
+                if not full_text:
+                    continue
 
                 article_data = {
                     "source": "youm7",
-                    "section": section_name,
+                    "language": "ar",
+                    "category": section_name,
                     "title": title,
-                    "link": link,
-                    "published_date": pub_date,
+                    "url": link,
                     "summary": summary,
                     "full_text": full_text,
                     "image_url": image_url,
-                    "scraped_at": datetime.datetime.utcnow().isoformat()
+                    "published_date": pub_date,
+                    "scraped_at": datetime.datetime.now(datetime.UTC).isoformat()
                 }
 
                 articles.append(article_data)
@@ -198,9 +199,7 @@ def main():
         logger.error("Failed to initialize S3 client")
         return
 
-    # ✅ Load previously seen links
     seen_links = load_seen_links_from_s3(s3_client)
-
     driver = init_driver()
     scraped_articles = []
 
@@ -211,7 +210,6 @@ def main():
     driver.quit()
     logger.info(f"Scraped {len(scraped_articles)} new articles")
 
-    # ✅ Upload scraped data to S3
     timestamp = datetime.datetime.utcnow().strftime("%Y%m%d_%H%M%S")
     s3_key = f"{S3_PREFIX}youm7_{timestamp}.json"
 
