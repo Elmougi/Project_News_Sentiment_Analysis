@@ -1,0 +1,6 @@
+mkdir sentiment_project
+cd sentiment_project
+
+
+python -m venv venv
+
