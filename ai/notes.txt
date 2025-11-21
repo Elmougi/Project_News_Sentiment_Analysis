@@ -1,0 +1,65 @@
+Phase1: before applying the model
+data preparation >> unified file from the two files of data
+
+merge the two files in one:merge_datasets.py
+csv file will be created 
+
+The content of the csv file:
+source | language | category | text
+revise_merged.py file 
+
+
+to run the previous script: python revise_merged.py >> will create "merged_news_clean.csv "
+this is the file that we will use
+
+now we will create the two models
+create new file: test_two_models.py
+then run this in the powershell: python test_two_models.py
+
+notes from ai tool concerning the models:
+الملف ده معمول علشان نختبر موديلين جاهزين لتحليل المشاعر (Sentiment Analysis):
+
+واحد للعربي
+
+واحد للإنجليزي
+
+من غير ما نحتاج نستخدم ملف الأخبار الكبير (merged_news.csv).
+يعني هو مجرد تجربة سريعة: ندخل جملة ونشوف الموديل هيصنّفها إزاي (إيجابي / سلبي / محايد).
+
+
+After this i tried random sentences to test the two models before fine tuning and here are the results of some sentences
+ English → {'label': 'neutral', 'score': 0.527885377407074}
+🔵 اكتب جملة بالعربي أو الإنجليزي ('exit' للخروج): أنا سعيد جدًا اليوم
+ Arabic → {'label': 'positive', 'score': 0.9648404121398926}
+
+🔵 اكتب جملة بالعربي أو الإنجليزي ('exit' للخروج): أنا حزين جدًا اليوم
+ Arabic → {'label': 'negative', 'score': 0.9635847806930542}
+
+🔵 اكتب جملة بالعربي أو الإنجليزي ('exit' للخروج): The market is collapsing
+ English → {'label': 'negative', 'score': 0.7435000538825989}
+ 
+🔵 اكتب جملة بالعربي أو الإنجليزي ('exit' للخروج): I am very happy today
+ English → {'label': 'positive', 'score': 0.9808284640312195}
+
+🔵 اكتب جملة بالعربي أو الإنجليزي ('exit' للخروج): I am upset
+ English → {'label': 'negative', 'score': 0.6788875460624695}
+
+🔵 اكتب جملة بالعربي أو الإنجليزي ('exit' للخروج): today is monday
+ English → {'label': 'neutral', 'score': 0.7469099760055542}
+
+🔵 اكتب جملة بالعربي أو الإنجليزي ('exit' للخروج): اليوم الاثنين
+ Arabic → {'label': 'neutral', 'score': 0.7067850232124329}
+
+🔵 اكتب جملة بالعربي أو الإنجليزي ('exit' للخروج):     انا في غاية السعادة اليوم
+ Arabic → {'label': 'positive', 'score': 0.9835545420646667}
+
+🔵 اكتب جملة بالعربي أو الإنجليزي ('exit' للخروج): انا تعبان و غير مرتاح
+ Arabic → {'label': 'negative', 'score': 0.8300197720527649}
+🔵 اكتب جملة بالعربي أو الإنجليزي ('exit' للخروج): 
+
+after this comes the new part:
+Preparing labeled sample from the cleaned dataset
+#pip install pandas scikit-learn
+create prepare_labels.py file
+run >> python prepare_labels.py
+expected output >> manual_label_sample.csv 

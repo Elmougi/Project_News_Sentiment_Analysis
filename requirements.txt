@@ -1,2 +1,0 @@
-pip install transformers evaluate torch scikit-learn
-pip install pandas
