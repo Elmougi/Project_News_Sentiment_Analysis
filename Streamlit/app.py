@@ -36,9 +36,9 @@ from ui.components import (
 )
 
 # Import page modules
-from pages.live_feed import render_live_feed
-from pages.analytics import render_analytics
-from pages.export import render_export
+from views.live_feed import render_live_feed
+from views.analytics import render_analytics
+from views.export import render_export
 
 
 def configure_page():
