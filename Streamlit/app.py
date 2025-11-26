@@ -4,6 +4,7 @@ Entry point for Streamlit app
 """
 import logging
 import streamlit as st
+from utils.theme_utils import theme_manager
 
 # Configure logging
 logging.basicConfig(
@@ -51,6 +52,7 @@ def configure_page():
     )
 
 
+
 def main():
     """Main application logic"""
     # Configure page
@@ -58,6 +60,8 @@ def main():
     
     # Inject custom CSS
     inject_custom_css()
+   
+    theme_manager.init_theme()
     
     # Detect database connection
     table, cols = detect_table()
