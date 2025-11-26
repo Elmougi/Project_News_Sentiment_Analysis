@@ -45,13 +45,22 @@ def fetch_headlines(table, cols, start_days=30, limit=2000, search=None):
     base_sql, order_col = build_headlines_sql(table, cols)
     params = {}
     
-    # Add date filter if scraped_at exists
-    if "scraped_at" in cols:
+    
+    where_clause = ""
+    date_col = None
+    
+    
+    if "published_date" in cols:
+        date_col = "published_date"
+    elif "scraped_at" in cols:
+        date_col = "scraped_at"
+        
+    # Apply date filter 
+    if date_col:
+        # Calculate cutoff date
         start_dt = (datetime.now(tz=Config.CAIRO_TZ) - timedelta(days=start_days)).isoformat()
-        where_clause = f" AND scraped_at >= :start_dt"
+        where_clause = f" AND {date_col} >= :start_dt"
         params["start_dt"] = start_dt
-    else:
-        where_clause = ""
     
     # Add search filter
     search_clause = ""
