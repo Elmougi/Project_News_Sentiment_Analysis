@@ -125,7 +125,7 @@ def main():
     st.markdown("---")
     st.markdown("""
     <div style="text-align:center; color:#6B7280; padding:2rem;">
-        <div style="margin-bottom:0.5rem;">🦅 <strong>Mokhber Intelligence</strong> • Midnight Edition</div>
+        <div style="margin-bottom:0.5rem;">🦅 <strong>Mokhber Intelligence</strong> </div>
         <div style="font-size:0.8rem;">Real-time Analytics • Built from Alexandria to the world</div>
     </div>
     """, unsafe_allow_html=True)
