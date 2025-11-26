@@ -57,11 +57,12 @@ def main():
     """Main application logic"""
     # Configure page
     configure_page()
+    theme_manager.init_theme()
     
     # Inject custom CSS
     inject_custom_css()
    
-    theme_manager.init_theme()
+    
     
     # Detect database connection
     table, cols = detect_table()
