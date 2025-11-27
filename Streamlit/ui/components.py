@@ -48,6 +48,7 @@ def render_sidebar(metadata):
         time_preset = st.radio(
             "📅 Timeframe",
             ["Last 24h", "Last 7 days", "Last 30 days", "Custom"],
+            index=2,
             horizontal=False
         )
         
