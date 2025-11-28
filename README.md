@@ -326,12 +326,6 @@ See individual READMEs for detailed information:
 ![Sentiment Metrics](media/dashboard_output_5.png)
 
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
 ## 🙏 Acknowledgments
 
 - **News Sources**: Al-Ahram, Youm7, Al-Gomhuria, The Guardian, BBC, New York Times
@@ -346,7 +340,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Built with ❤️ in Alexandria, Egypt**
 
 *Illuminating the News Landscape • Mokhber Intelligence Platform*
-
-[Documentation](docs/) • [Issues](https://github.com/yourusername/mokhber-intelligence/issues) • [Discussions](https://github.com/yourusername/mokhber-intelligence/discussions)
-
 </div>
