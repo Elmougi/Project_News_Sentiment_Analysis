@@ -22,7 +22,7 @@ def render_analytics(viz_df, metrics):
     """Render analytics dashboard with all visualizations"""
     st.markdown("### 📊 Analytics Dashboard")
     
-    
+    # FIX 1: Remove 'embedding' vector column if present (prevents UI lag & clutter)
     if 'embedding' in viz_df.columns:
         viz_df = viz_df.drop(columns=['embedding'])
 
@@ -239,51 +239,78 @@ def render_content_intelligence_section(viz_df):
             st.info("Not enough data for bigram analysis.")
     
     with ci_c2:
-        st.markdown("**📰 Sentiment Extremes Feed**")
+        st.markdown("**📰 Sentiment Extremes Feed (Newest)**")
         render_sentiment_highlights(viz_df)
 
 
 def render_sentiment_highlights(viz_df):
-    """Render positive and negative article highlights (CLICKABLE)"""
+    """Render positive and negative article highlights (Sorted by Newest + Clickable + Summary)"""
     col_pos, col_neg = st.columns(2)
     
-    
-    
+    # FIX 3: Sort by Date (Newest First) to ensure "Important/Recent" items are shown
+    if 'published_dt' in viz_df.columns:
+        # Sort descending so newest is at top
+        sorted_df = viz_df.sort_values('published_dt', ascending=False)
+    else:
+        sorted_df = viz_df
+
     with col_pos:
         st.markdown("##### ✅ Positive Highlights")
-        pos_arts = viz_df[viz_df['sentiment_lower'] == 'positive'].head(5)
+        # Take top 5 NEWEST positive articles
+        pos_arts = sorted_df[sorted_df['sentiment_lower'] == 'positive'].head(5)
+        
         if not pos_arts.empty:
             for _, r in pos_arts.iterrows():
-                title = html.escape(str(r['title'])[:80])
-                url = html.escape(str(r['url']))
+                # Enhanced Content
+                title = html.escape(str(r.get('title', 'No Title'))[:90])
+                url = html.escape(str(r.get('url', '#')))
+                source = html.escape(str(r.get('source', 'Unknown')))
+                # Show snippet of summary for context
+                summary = html.escape(str(r.get('summary', ''))[:140]) + "..."
+                date_display = r.get('published_display', '')
+
                 st.markdown(f"""
-                <div style="padding: 8px; border-left: 3px solid #10B981; background: rgba(16, 185, 129, 0.1); margin-bottom: 8px; border-radius: 4px;">
-                    <div style="font-weight: bold; font-size: 0.9rem;">
+                <div style="padding: 12px; border-left: 3px solid #10B981; background: rgba(16, 185, 129, 0.05); margin-bottom: 10px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.15);">
+                    <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; line-height: 1.3;">
                         <a href="{url}" target="_blank" style="text-decoration: none; color: inherit;">{title}</a>
                     </div>
-                    <div style="font-size: 0.75rem; color: #9CA3AF;">{r['source']}</div>
+                    <div style="font-size: 0.85rem; color: var(--text-main); margin-bottom: 8px; opacity: 0.9; line-height: 1.4;">{summary}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.75rem; color: #10B981; font-weight: 600; background: rgba(16,185,129,0.1); padding: 2px 6px; border-radius: 4px;">{source}</span>
+                        <span style="font-size: 0.7rem; color: var(--text-muted); font-family: monospace; opacity: 0.8;">{date_display}</span>
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
         else:
-            st.caption("No positive articles.")
+            st.caption("No positive articles found in current selection.")
     
     with col_neg:
         st.markdown("##### ⚠️ Negative Highlights")
-        neg_arts = viz_df[viz_df['sentiment_lower'] == 'negative'].head(5)
+        # Take top 5 NEWEST negative articles
+        neg_arts = sorted_df[sorted_df['sentiment_lower'] == 'negative'].head(5)
+        
         if not neg_arts.empty:
             for _, r in neg_arts.iterrows():
-                title = html.escape(str(r['title'])[:80])
-                url = html.escape(str(r['url']))
+                title = html.escape(str(r.get('title', 'No Title'))[:90])
+                url = html.escape(str(r.get('url', '#')))
+                source = html.escape(str(r.get('source', 'Unknown')))
+                summary = html.escape(str(r.get('summary', ''))[:140]) + "..."
+                date_display = r.get('published_display', '')
+
                 st.markdown(f"""
-                <div style="padding: 8px; border-left: 3px solid #EF4444; background: rgba(239, 68, 68, 0.1); margin-bottom: 8px; border-radius: 4px;">
-                    <div style="font-weight: bold; font-size: 0.9rem;">
+                <div style="padding: 12px; border-left: 3px solid #EF4444; background: rgba(239, 68, 68, 0.05); margin-bottom: 10px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.15);">
+                    <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; line-height: 1.3;">
                         <a href="{url}" target="_blank" style="text-decoration: none; color: inherit;">{title}</a>
                     </div>
-                    <div style="font-size: 0.75rem; color: #9CA3AF;">{r['source']}</div>
+                    <div style="font-size: 0.85rem; color: var(--text-main); margin-bottom: 8px; opacity: 0.9; line-height: 1.4;">{summary}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.75rem; color: #EF4444; font-weight: 600; background: rgba(239,68,68,0.1); padding: 2px 6px; border-radius: 4px;">{source}</span>
+                        <span style="font-size: 0.7rem; color: var(--text-muted); font-family: monospace; opacity: 0.8;">{date_display}</span>
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
         else:
-            st.caption("No negative articles.")
+            st.caption("No negative articles found in current selection.")
 
 
 def render_temporal_section(viz_df):
