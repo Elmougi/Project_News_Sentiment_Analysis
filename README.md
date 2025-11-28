@@ -20,15 +20,16 @@
 ## 📋 Table of Contents
 
 - [Overview](#-overview)
-- [Architecture](#-architecture)
+- [Architecture](#%EF%B8%8F-architecture)
 - [Features](#-features)
+- [Live Demo](#-live-demo)
 - [System Components](#-system-components)
 - [Technology Stack](#-technology-stack)
 - [Getting Started](#-getting-started)
 - [Project Structure](#-project-structure)
 - [Screenshots](#-screenshots)
-- [Contributing](#-contributing)
-- [License](#-license)
+
+
 
 ---
 
