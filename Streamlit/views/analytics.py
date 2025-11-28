@@ -299,7 +299,7 @@ def render_sentiment_highlights_cards(pos_arts, neg_arts):
                 st.markdown(f"""
                 <div style="padding: 12px; border-left: 3px solid #EF4444; background: rgba(239, 68, 68, 0.05); margin-bottom: 10px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.15);">
                     <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; line-height: 1.3;">
-                        <a href="{url}" target="_blank" style="text-decoration: none; color: inherit;">{title} 🔗</a>
+                        <a href="{url}" target="_blank" style="text-decoration: none; color: inherit;">{title}</a>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-size: 0.75rem; color: #EF4444; font-weight: 600; background: rgba(239,68,68,0.1); padding: 2px 6px; border-radius: 4px;">{source}</span>
