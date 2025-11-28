@@ -13,20 +13,14 @@ logger = logging.getLogger("mokhber.queries")
 
 
 def build_headlines_sql(table, cols):
-    """
-    Build SQL query for fetching headlines.
-    Handles case-insensitive column matching.
-    Explicitly EXCLUDES 'embedding' to prevent UI crashes/lag.
-    """
-    
-    # Normalize DB columns to lowercase for matching
     col_lookup = {c.lower(): c for c in cols}
-    
     col_map = {}
+    
+    
     target_fields = [
         "id", "title", "summary", "source", "category", 
         "sentiment", "url", "language", "published_date", 
-        "scraped_at", "image_url"
+        "scraped_at", "image_url", "embedding"
     ]
     
     for field in target_fields:
@@ -35,9 +29,7 @@ def build_headlines_sql(table, cols):
         else:
             col_map[field] = f"NULL AS {field}"
     
-    
     order_col = col_lookup.get("scraped_at", "id")
-    
     
     sql = f"""
     SELECT {col_map['id']} AS id,
@@ -50,7 +42,8 @@ def build_headlines_sql(table, cols):
            {col_map['language']} AS language,
            {col_map['published_date']} AS published_date,
            {col_map['scraped_at']} AS scraped_at,
-           {col_map['image_url']} AS image_url
+           {col_map['image_url']} AS image_url,
+           {col_map['embedding']} AS embedding
     FROM {table}
     WHERE 1=1
     """
@@ -61,7 +54,7 @@ def build_headlines_sql(table, cols):
 def fetch_headlines(table, cols, start_days=30, limit=2000, search=None):
     """Fetch and normalize headlines from database"""
     
-    # 1. Build Query (Column Selection)
+    # 1. Build Query 
     base_sql, order_col = build_headlines_sql(table, cols)
     params = {}
     col_lookup = {c.lower(): c for c in cols}
