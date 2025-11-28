@@ -297,6 +297,7 @@ See individual READMEs for detailed information:
 - [📰 Scrapers Documentation](Scrapers/README.md)
 - [🤖 Processors Documentation](processor/README.md)
 - [📊 Dashboard Documentation](Streamlit/README.md)
+- [💾 ETL Loader Documentation](loader/README.md)
 
 
 ---
@@ -329,5 +330,5 @@ See individual READMEs for detailed information:
 ---
 
 <div align="center">
-*Illuminating the News Landscape • Mokhber Intelligence Platform*
+**Illuminating the News Landscape • Mokhber Intelligence Platform**
 </div>
