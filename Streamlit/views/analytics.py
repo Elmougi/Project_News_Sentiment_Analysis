@@ -87,7 +87,7 @@ def render_analytics(viz_df, metrics):
     pos_highlights = get_semantic_highlights(viz_df[viz_df['sentiment_lower'] == 'positive'])
     neg_highlights = get_semantic_highlights(viz_df[viz_df['sentiment_lower'] == 'negative'])
 
-    #2. DROP EMBEDDING (Cleanup)
+    #DROP EMBEDDING (Cleanup)
     
     clean_df = viz_df.drop(columns=['embedding'], errors='ignore')
 
@@ -126,7 +126,7 @@ def render_analytics(viz_df, metrics):
     st.divider()
     
     
-    render_temporal_section(clean_df)
+    render_WeekdayVolume_section(clean_df)
 
 
 def render_sentiment_section(viz_df, metrics):
@@ -256,7 +256,7 @@ def render_content_intelligence_section(viz_df, pos_highlights, neg_highlights):
             st.info("Not enough data for bigram analysis.")
     
     with ci_c2:
-        st.markdown("**📰 Sentiment Extremes Feed (Unique & Newest)**")
+        st.markdown("**📰 Sentiment Extremes Feed**")
         render_sentiment_highlights_cards(pos_highlights, neg_highlights)
 
 
@@ -276,7 +276,7 @@ def render_sentiment_highlights_cards(pos_arts, neg_arts):
                 st.markdown(f"""
                 <div style="padding: 12px; border-left: 3px solid #10B981; background: rgba(16, 185, 129, 0.05); margin-bottom: 10px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.15);">
                     <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; line-height: 1.3;">
-                        <a href="{url}" target="_blank" style="text-decoration: none; color: inherit;">{title} 🔗</a>
+                        <a href="{url}" target="_blank" style="text-decoration: none; color: inherit;">{title}</a>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-size: 0.75rem; color: #10B981; font-weight: 600; background: rgba(16,185,129,0.1); padding: 2px 6px; border-radius: 4px;">{source}</span>
@@ -311,8 +311,8 @@ def render_sentiment_highlights_cards(pos_arts, neg_arts):
             st.caption("No negative articles found.")
 
 
-def render_temporal_section(viz_df):
-    st.markdown("#### 📅 Temporal Activity")
+def render_WeekdayVolume_section(viz_df):
+    st.markdown("#### 📅 Weekday Publication Volume")
     wd_c1, wd_c2 = st.columns(2)
     with wd_c1:
         st.markdown("**Publishing Volume by Weekday**")
