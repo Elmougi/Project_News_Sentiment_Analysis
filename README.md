@@ -336,8 +336,5 @@ See individual READMEs for detailed information:
 ---
 
 <div align="center">
-
-**Built with ❤️ in Alexandria, Egypt**
-
 *Illuminating the News Landscape • Mokhber Intelligence Platform*
 </div>
