@@ -18,84 +18,50 @@ from ui.charts import (
 )
 
 
-def render_analytics(df):
-    st.title("📊 News Analytics Dashboard")
-
-    # ---------------------------------------------------------
-    # FIX 1: Remove 'embedding' column to prevent UI clutter
-    # ---------------------------------------------------------
-    if "embedding" in df.columns:
-        df = df.drop(columns=["embedding"])
-
-    if df.empty:
-        st.warning("No data available.")
-        return
-
-    # Top Metrics
-    total = len(df)
-    pos = len(df[df['sentiment'] == 'Positive'])
-    neg = len(df[df['sentiment'] == 'Negative'])
-    neu = len(df[df['sentiment'] == 'Neutral'])
-
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Total Articles", total)
-    c2.metric("Positive", pos, delta=f"{pos/total:.1%}")
-    c3.metric("Negative", neg, delta=f"-{neg/total:.1%}")
-    c4.metric("Neutral", neu)
-
-    st.divider()
-
-    # ---------------------------------------------------------
-    # Sentiment Share (Now Clean without Embeddings)
-    # ---------------------------------------------------------
-    col1, col2 = st.columns([2, 1])
+def render_analytics(viz_df, metrics):
+    """Render analytics dashboard with all visualizations"""
+    st.markdown("### 📊 Analytics Dashboard")
     
-    with col1:
-        st.subheader("Sentiment Trend")
-        if "published_date" in df.columns:
-            # Ensure date format
-            df['published_date'] = pd.to_datetime(df['published_date'], errors='coerce')
-            daily = df.groupby([df['published_date'].dt.date, 'sentiment']).size().reset_index(name='count')
-            fig = px.bar(daily, x='published_date', y='count', color='sentiment', 
-                         color_discrete_map={"Positive": "#00CC96", "Negative": "#EF553B", "Neutral": "#636EFA"})
-            st.plotly_chart(fig, use_container_width=True)
+    
+    if 'embedding' in viz_df.columns:
+        viz_df = viz_df.drop(columns=['embedding'])
 
-    with col2:
-        st.subheader("Sentiment Share")
-        # Since 'embedding' is dropped, this chart (and its tooltip) will be clean
-        counts = df['sentiment'].value_counts().reset_index()
-        counts.columns = ['sentiment', 'count']
-        fig_pie = px.pie(counts, names='sentiment', values='count', 
-                         color='sentiment',
-                         color_discrete_map={"Positive": "#00CC96", "Negative": "#EF553B", "Neutral": "#636EFA"})
-        st.plotly_chart(fig_pie, use_container_width=True)
-
+    if viz_df.empty:
+        st.info("📊 No data available for analysis.")
+        return
+    
+    # Sentiment breakdown section
+    render_sentiment_section(viz_df, metrics)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Time series charts
+    render_timeseries_section(viz_df)
+    
     st.divider()
-
-    # ---------------------------------------------------------
-    # FIX 2: Clickable Highlights (Positive & Negative)
-    # ---------------------------------------------------------
-    h1, h2 = st.columns(2)
-
-    with h1:
-        st.subheader("🌟 Positive Highlights")
-        pos_df = df[df['sentiment'] == 'Positive'].head(5)
-        for _, row in pos_df.iterrows():
-            with st.container(border=True):
-                # TITLE AS LINK
-                st.markdown(f"#### [{row['title']}]({row['url']})")
-                st.caption(f"{row['source']} • {row['published_date']}")
-                st.write(row['summary'])
-
-    with h2:
-        st.subheader("⚠️ Negative Highlights")
-        neg_df = df[df['sentiment'] == 'Negative'].head(5)
-        for _, row in neg_df.iterrows():
-            with st.container(border=True):
-                # TITLE AS LINK
-                st.markdown(f"#### [{row['title']}]({row['url']})")
-                st.caption(f"{row['source']} • {row['published_date']}")
-                st.write(row['summary'])
+    
+    # Deep sentiment analysis
+    render_deep_sentiment_section(viz_df)
+    
+    st.divider()
+    
+    # Category trends
+    render_category_trends_section(viz_df)
+    
+    st.divider()
+    
+    # Source and category distribution
+    render_distribution_section(viz_df)
+    
+    st.divider()
+    
+    # Content intelligence
+    render_content_intelligence_section(viz_df)
+    
+    st.divider()
+    
+    # Temporal analysis
+    render_temporal_section(viz_df)
 
 
 def render_sentiment_section(viz_df, metrics):
@@ -278,8 +244,10 @@ def render_content_intelligence_section(viz_df):
 
 
 def render_sentiment_highlights(viz_df):
-    """Render positive and negative article highlights"""
+    """Render positive and negative article highlights (CLICKABLE)"""
     col_pos, col_neg = st.columns(2)
+    
+    
     
     with col_pos:
         st.markdown("##### ✅ Positive Highlights")
@@ -287,9 +255,12 @@ def render_sentiment_highlights(viz_df):
         if not pos_arts.empty:
             for _, r in pos_arts.iterrows():
                 title = html.escape(str(r['title'])[:80])
+                url = html.escape(str(r['url']))
                 st.markdown(f"""
                 <div style="padding: 8px; border-left: 3px solid #10B981; background: rgba(16, 185, 129, 0.1); margin-bottom: 8px; border-radius: 4px;">
-                    <div style="font-weight: bold; font-size: 0.9rem;">{title}</div>
+                    <div style="font-weight: bold; font-size: 0.9rem;">
+                        <a href="{url}" target="_blank" style="text-decoration: none; color: inherit;">{title} 🔗</a>
+                    </div>
                     <div style="font-size: 0.75rem; color: #9CA3AF;">{r['source']}</div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -302,9 +273,12 @@ def render_sentiment_highlights(viz_df):
         if not neg_arts.empty:
             for _, r in neg_arts.iterrows():
                 title = html.escape(str(r['title'])[:80])
+                url = html.escape(str(r['url']))
                 st.markdown(f"""
                 <div style="padding: 8px; border-left: 3px solid #EF4444; background: rgba(239, 68, 68, 0.1); margin-bottom: 8px; border-radius: 4px;">
-                    <div style="font-weight: bold; font-size: 0.9rem;">{title}</div>
+                    <div style="font-weight: bold; font-size: 0.9rem;">
+                        <a href="{url}" target="_blank" style="text-decoration: none; color: inherit;">{title} 🔗</a>
+                    </div>
                     <div style="font-size: 0.75rem; color: #9CA3AF;">{r['source']}</div>
                 </div>
                 """, unsafe_allow_html=True)
