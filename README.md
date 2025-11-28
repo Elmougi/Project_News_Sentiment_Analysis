@@ -39,7 +39,7 @@
 
 ### Key Capabilities
 
-- 🔄 **Automated Multi-Source Scraping** - Collects news from 6+ major outlets
+- 🔄 **Automated Multi-Source Scraping** - Collects news from 6 major outlets
 - 🧠 **AI-Powered Processing** - Gemini & Qwen models for summarization & sentiment
 - 🔍 **Semantic Search** - Vector embeddings with pgvector for duplicate detection
 - 📊 **Interactive Dashboard** - Real-time analytics with Streamlit
@@ -238,12 +238,6 @@ Explore real-time news analytics, sentiment trends, and interactive visualizatio
    ```
    http://localhost:8501
    ```
-
-### Cloud Deployment & More Details
-Detailed deployment instructions are in each component's README:
-- [Scrapers Deployment](Scrapers/readme.md)
-- [Processors Deployment](processor/readme.md)
-- [Dashboard Deployment](Streamlit/readme.md)
 
 ---
 
