@@ -301,10 +301,10 @@ Each major folder contains:
 - **README.md** - Component-specific documentation
 
 See individual READMEs for detailed information:
-- [📰 Scrapers Documentation](Scrapers/readme.md)
-- [🤖 Processors Documentation](processor/readme.md)
-- [📊 Dashboard Documentation](Streamlit/readme.md)
-- [💾 Loader Documentation](loader/readme.md)
+- [📰 Scrapers Documentation](Scrapers/README.md)
+- [🤖 Processors Documentation](processor/README.md)
+- [📊 Dashboard Documentation](Streamlit/README.md)
+
 
 ---
 
