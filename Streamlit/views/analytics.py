@@ -22,6 +22,10 @@ def render_analytics(viz_df, metrics):
     """Render analytics dashboard with all visualizations"""
     st.markdown("### 📊 Analytics Dashboard")
     
+    
+    if 'embedding' in viz_df.columns:
+        viz_df = viz_df.drop(columns=['embedding'])
+
     if viz_df.empty:
         st.info("📊 No data available for analysis.")
         return
@@ -240,8 +244,10 @@ def render_content_intelligence_section(viz_df):
 
 
 def render_sentiment_highlights(viz_df):
-    """Render positive and negative article highlights"""
+    """Render positive and negative article highlights (CLICKABLE)"""
     col_pos, col_neg = st.columns(2)
+    
+    
     
     with col_pos:
         st.markdown("##### ✅ Positive Highlights")
@@ -249,9 +255,12 @@ def render_sentiment_highlights(viz_df):
         if not pos_arts.empty:
             for _, r in pos_arts.iterrows():
                 title = html.escape(str(r['title'])[:80])
+                url = html.escape(str(r['url']))
                 st.markdown(f"""
                 <div style="padding: 8px; border-left: 3px solid #10B981; background: rgba(16, 185, 129, 0.1); margin-bottom: 8px; border-radius: 4px;">
-                    <div style="font-weight: bold; font-size: 0.9rem;">{title}</div>
+                    <div style="font-weight: bold; font-size: 0.9rem;">
+                        <a href="{url}" target="_blank" style="text-decoration: none; color: inherit;">{title}</a>
+                    </div>
                     <div style="font-size: 0.75rem; color: #9CA3AF;">{r['source']}</div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -264,9 +273,12 @@ def render_sentiment_highlights(viz_df):
         if not neg_arts.empty:
             for _, r in neg_arts.iterrows():
                 title = html.escape(str(r['title'])[:80])
+                url = html.escape(str(r['url']))
                 st.markdown(f"""
                 <div style="padding: 8px; border-left: 3px solid #EF4444; background: rgba(239, 68, 68, 0.1); margin-bottom: 8px; border-radius: 4px;">
-                    <div style="font-weight: bold; font-size: 0.9rem;">{title}</div>
+                    <div style="font-weight: bold; font-size: 0.9rem;">
+                        <a href="{url}" target="_blank" style="text-decoration: none; color: inherit;">{title}</a>
+                    </div>
                     <div style="font-size: 0.75rem; color: #9CA3AF;">{r['source']}</div>
                 </div>
                 """, unsafe_allow_html=True)
