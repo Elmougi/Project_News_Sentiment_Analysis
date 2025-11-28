@@ -330,5 +330,5 @@ See individual READMEs for detailed information:
 ---
 
 <div align="center">
-**Illuminating the News Landscape • Mokhber Intelligence Platform**
+Illuminating the News Landscape • Mokhber Intelligence Platform
 </div>
