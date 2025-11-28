@@ -24,10 +24,10 @@
 - [Features](#-features)
 - [Live Demo](#-live-demo)
 - [System Components](#-system-components)
-- [Technology Stack](#-technology-stack)
-- [Getting Started](#-getting-started)
+- [Technology Stack](#%EF%B8%8F-technology-stack)
+- [Getting Started](#for-local-development)
 - [Project Structure](#-project-structure)
-- [Screenshots](#-screenshots)
+- [Screenshots](#%EF%B8%8F-screenshots)
 
 
 
