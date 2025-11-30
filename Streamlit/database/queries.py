@@ -51,7 +51,7 @@ def build_headlines_sql(table, cols):
 
 
 @st.cache_data(ttl=Config.DATA_CACHE_TTL)
-def fetch_headlines(table, cols, start_days=30, limit=2000, search=None):
+def fetch_headlines(table, cols, start_days=30, limit=4000, search=None):
     """Fetch and normalize headlines from database"""
     
     # 1. Build Query 
@@ -75,7 +75,7 @@ def fetch_headlines(table, cols, start_days=30, limit=2000, search=None):
                 search_clause = " AND summary ILIKE :search"
     
     # 3. Fetch Data 
-    safe_limit = int(limit) + 500
+    safe_limit = int(limit) + 1000
     final_sql = base_sql + search_clause + f" ORDER BY {order_col} DESC LIMIT :limit"
     params["limit"] = safe_limit
     
