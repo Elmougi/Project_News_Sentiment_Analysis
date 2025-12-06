@@ -51,7 +51,7 @@ def build_headlines_sql(table, cols):
 
 
 @st.cache_data(ttl=Config.DATA_CACHE_TTL)
-def fetch_headlines(table, cols, start_days=30, limit=4000, search=None):
+def fetch_headlines(table, cols, start_days=30, limit=5000, search=None):
     """Fetch and normalize headlines from database"""
     
     # 1. Build Query 
