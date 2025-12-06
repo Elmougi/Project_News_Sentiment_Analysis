@@ -40,7 +40,7 @@ class Config:
     
     # Query Limits
     DEFAULT_DAYS_BACK = 30
-    MAX_QUERY_LIMIT = 4000
+    MAX_QUERY_LIMIT = 5000
     DEFAULT_DISPLAY_LIMIT = 50
     
     # Demo Mode
